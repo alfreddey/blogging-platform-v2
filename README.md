@@ -1,6 +1,6 @@
 # BLOGGING-PLATFORM
 
-[cite_start]A web-based Spring Boot application that leverages RESTful and GraphQL APIs to manage a blogging system[cite: 7, 8]. [cite_start]This project applies advanced concepts like AOP, Bean Validation, and algorithmic data optimization[cite: 15, 17].
+A web-based Spring Boot application that leverages RESTful and GraphQL APIs to manage a blogging system. This project applies advanced concepts like AOP, Bean Validation, and algorithmic data optimization.
 
 # Table of Contents
 1. [Project Overview](#project-overview)
@@ -10,35 +10,35 @@
 5. [Environment Configuration](#environment-configuration)
 6. [API Documentation & Testing](#api-documentation--testing)
 7. [Usage](#usage)
-8. [Contributing](#contributing)
+8. [Contribution](#contribution)
 9. [License](#license)
 10. [Contact](#contact)
 
 ## Project Overview
-[cite_start]This phase of the Blogging Platform focuses on building a scalable backend using Spring Boot 3.x[cite: 7, 64]. [cite_start]The system handles complex operations like constructor-based dependency injection, centralized exception handling, and performance monitoring to ensure a maintainable and efficient web application[cite: 13, 25, 45, 57].
+This phase of the Blogging Platform focuses on building a scalable backend using Spring Boot. The system handles complex operations like constructor-based dependency injection, centralized exception handling, and performance monitoring to ensure a maintainable and efficient web application.
 
 ## Feature Summary
-* [cite_start]**Dual API Support**: Integrated RESTful endpoints and GraphQL schemas (queries/mutations) for flexible data retrieval[cite: 14, 16].
-* [cite_start]**Advanced DSA Integration**: Efficient sorting, searching, and pagination algorithms for scalable content delivery[cite: 10, 17].
-* [cite_start]**Validation & Error Handling**: Robust data integrity using Bean Validation and centralized `@ControllerAdvice`[cite: 15, 43].
-* [cite_start]**Cross-Cutting Concerns (AOP)**: Automated logging and performance monitoring using `@Before`, `@After`, and `@Around` aspects[cite: 57, 59].
-* [cite_start]**Interactive Documentation**: Automatic API documentation generated via Springdoc OpenAPI and Swagger UI[cite: 46, 64].
+* **Dual API Support**: Integrated RESTful endpoints and GraphQL schemas (queries/mutations) for flexible data retrieval.
+* **Advanced DSA Integration**: Efficient sorting, searching, and pagination algorithms for scalable content delivery.
+* **Validation & Error Handling**: Robust data integrity using Bean Validation and centralized `@ControllerAdvice`.
+* **Cross-Cutting Concerns (AOP)**: Automated logging and performance monitoring using `@Before`, `@After`, and `@Around` aspects.
+* **Interactive Documentation**: Automatic API documentation generated via Springdoc OpenAPI and Swagger UI.
 
 ## Technical Requirements
 | Area | Description |
 | :--- | :--- |
-| **Framework** | [cite_start]Spring Boot 3.x (Spring Web, Validation, AOP, GraphQL) [cite: 64] |
-| **Language** | [cite_start]Java 21 [cite: 64] |
-| **Database** | [cite_start]Relational (MySQL, PostgreSQL) or NoSQL (MongoDB) [cite: 64] |
-| **Architecture** | [cite_start]Layered (Controller -> Service -> Repository) [cite: 64] |
-| **Documentation** | [cite_start]Springdoc OpenAPI / Swagger UI [cite: 64] |
+| **Framework** | Spring Boot 3.x (Spring Web, Validation, AOP, GraphQL) |
+| **Language** | Java 21 |
+| **Database** | NoSQL (MongoDB) |
+| **Architecture** | Layered (Controller -> Service -> Repository)  |
+| **Documentation** | Springdoc OpenAPI / Swagger UI |
 
 ## Installation
-1.  [cite_start]**Prerequisites**: Ensure you have **JDK 21** or higher installed[cite: 64].
+1.  **Prerequisites**: Ensure you have **JDK 21** or higher installed.
 2.  **Clone the Repository**:
     ```bash
-    git clone [https://github.com/alfreddey/blogging-platform](https://github.com/alfreddey/blogging-platform)
-    cd blogging-platform
+    git clone https://github.com/alfreddey/blogging-platform-v2
+    cd blogging-platform-v2
     ```
 3.  **Build the Project**:
     ```bash
@@ -46,7 +46,7 @@
     ```
 
 ## Environment Configuration
-[cite_start]The application uses Spring Profiles to manage different environments efficiently[cite: 21, 24]:
+The application uses Spring Profiles to manage different environments efficiently:
 * **dev**: Local development settings.
 * **test**: Configurations for automated testing environments.
 * **prod**: Optimized settings for production deployment.
@@ -55,14 +55,14 @@ Run with a specific profile:
 `mvn spring-boot:run -Dspring-boot.run.profiles=dev`
 
 ## API Documentation & Testing
-* [cite_start]**REST API**: Tested via **Postman**; follows standard CRUD conventions with structured JSON responses[cite: 30, 31, 64].
-* [cite_start]**GraphQL**: Explore schemas and test mutations via **GraphiQL** or **Altair**[cite: 54, 64].
-* [cite_start]**OpenAPI**: Access the interactive Swagger UI at `/swagger-ui.html`[cite: 46, 66].
+* **REST API**: Tested via **Postman**; follows standard CRUD conventions with structured JSON responses.
+* **GraphQL**: Explore schemas and test mutations via **GraphiQL** or **Altair**.
+* **OpenAPI**: Access the interactive Swagger UI at `/swagger-ui.html`.
 
 ## Usage
 1.  **Initialize**: Run the application via your IDE or Maven command.
-2.  [cite_start]**Manage Content**: Use REST or GraphQL to create, view, sort, and filter blog posts[cite: 28, 34].
-3.  [cite_start]**Monitor**: Observe logs and performance metrics generated by AOP aspects during CRUD operations[cite: 60, 61].
+2.  **Manage Content**: Use REST or GraphQL to create, view, sort, and filter blog posts.
+3.  **Monitor**: Observe logs and performance metrics generated by AOP aspects during CRUD operations.
 
 ## Contribution
 1.  Fork the repository.
