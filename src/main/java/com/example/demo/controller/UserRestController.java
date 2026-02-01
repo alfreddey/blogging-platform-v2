@@ -1,0 +1,125 @@
+package com.example.demo.controller;
+
+import com.example.demo.dto.ApiResponse;
+import com.example.demo.dto.CreateUserRequest;
+import com.example.demo.dto.UserRequest;
+import com.example.demo.dto.UserResponse;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.service.interfaces.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("api/v1/users")
+@Tag(name = "User Management", description = "Operations for managing user accounts and profiles")
+public class UserRestController {
+    private final UserService userService;
+
+    public UserRestController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Operation(
+            summary = "Retrieves user details by ID",
+            description = """
+                    Returns a single user object.
+                    Requires a valid UUID.
+                    If no user is found, a 404 is returned.
+                    """
+    )
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "User profile found and retrieved successfully"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "404",
+                    description = "No user found with that UUID"
+            )
+    })
+    @GetMapping("/{id}")
+    public ApiResponse<UserResponse> getById(@Valid @PathVariable String id) {
+        var response = userService.getById(id);
+
+        if (response == null) {
+            throw new ResourceNotFoundException("User not found with ID: " + id);
+        }
+
+        return new ApiResponse<>(HttpStatus.OK, "User retrieved successfully", response);
+    }
+
+    @Operation(
+            summary = "Retrieves a list of user details",
+            description = "Returns a list of all registered users."
+    )
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "List of users retrieved successfully"
+            )
+    })
+    @GetMapping
+    public ApiResponse<List<UserResponse>> getAll() {
+        var response = userService.getAll();
+
+        return new ApiResponse<>(HttpStatus.OK, "Users retrieved successfully", response);
+    }
+
+    @Operation(summary = "Register a new user account")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "201",
+                    description = "User account successfully created and persisted."
+            )
+    })
+    @PostMapping
+    public ApiResponse<UserResponse> create(@Valid @RequestBody CreateUserRequest request) {
+        var response = userService.create(request);
+
+        return new ApiResponse<>(HttpStatus.CREATED, "User created successfully", response);
+    }
+
+    @Operation(
+            summary = "Update a registered user's password",
+            description = "Updates the password for a specific user identified by their ID."
+    )
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "Password updated successfully"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "404",
+                    description = "User not found"
+            )
+    })
+    @PatchMapping("/{id}/password")
+    public ApiResponse<UserResponse> updatePassword(@Valid @PathVariable String id, @RequestBody UserRequest request) {
+        var response = userService.updatePassword(id, request.password);
+
+        return new ApiResponse<>(HttpStatus.OK, "User password updated successfully", response);
+    }
+
+    @Operation(
+            summary = "Delete a user account",
+            description = "Permanently removes a user from the system by their UUID."
+    )
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "User successfully deleted"
+            )
+    })
+    @DeleteMapping("/{id}")
+    public ApiResponse<Boolean> delete(@Valid @PathVariable String id) {
+        var response = userService.delete(id);
+
+        return new ApiResponse<>(HttpStatus.NO_CONTENT, "User deleted successfully", response);
+    }
+}
