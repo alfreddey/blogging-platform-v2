@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.CreateUserRequest;
-import com.example.demo.dto.UserRequest;
 import com.example.demo.dto.UserResponse;
 import com.example.demo.service.interfaces.UserService;
 import org.springframework.graphql.data.method.annotation.Argument;
