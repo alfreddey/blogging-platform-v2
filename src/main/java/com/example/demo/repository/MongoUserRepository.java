@@ -1,6 +1,5 @@
 package com.example.demo.repository;
 
-import com.example.demo.dto.UserResponse;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.mapper.MongoUserMapper;
 import com.example.demo.model.entity.User;
@@ -27,34 +26,28 @@ public class MongoUserRepository implements UserRepository {
     }
 
     @Override
-    public UserResponse getById(String id) {
+    public User getById(String id) {
         var idFilter = Filters.eq("_id", new ObjectId(id));
 
-        return MongoUserMapper.toResponse(userCollection.find(idFilter).first());
+        return MongoUserMapper.toUser(userCollection.find(idFilter).first());
     }
 
     @Override
-    public List<UserResponse> getAll() {
+    public List<User> getAll() {
         var userDocuments = new ArrayList<Document>();
 
         userCollection.find().into(userDocuments);
 
-        return new ArrayList<>(userDocuments.stream().map(MongoUserMapper::toResponse).toList());
+        return new ArrayList<>(userDocuments.stream().map(MongoUserMapper::toUser).toList());
     }
 
     @Override
-    public UserResponse insert(User user) {
-        var userDocument = new Document()
-                .append("_id", new ObjectId())
-                .append("name", user.getName())
-                .append("email", user.getEmail())
-                .append("password", user.getPassword());
+    public User insert(User user) {
+        var userDocument = MongoUserMapper.toDocument(user);
 
         userCollection.insertOne(userDocument);
 
-        user.setId(userDocument.getObjectId("_id").toHexString());
-
-        return MongoUserMapper.toResponse(userDocument);
+        return MongoUserMapper.toUser(userDocument);
     }
 
     @Override
@@ -65,7 +58,7 @@ public class MongoUserRepository implements UserRepository {
     }
 
     @Override
-    public UserResponse updatePassword(String id, String password) {
+    public User updatePassword(String id, String password) {
         var filter = Filters.eq("_id", new ObjectId(id));
 
         var updates = Updates.combine(
@@ -81,6 +74,6 @@ public class MongoUserRepository implements UserRepository {
             throw new ResourceNotFoundException("User not found");
         }
 
-        return MongoUserMapper.toResponse(updatedDoc);
+        return MongoUserMapper.toUser(updatedDoc);
     }
 }
