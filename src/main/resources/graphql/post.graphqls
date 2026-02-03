@@ -1,0 +1,20 @@
+extend type Query {
+    post(id: ID!): PostResponse
+}
+
+extend type Mutation {
+    createPost(input: CreatePostRequest): PostResponse
+}
+
+type PostResponse {
+    id: ID!,
+    title: String!,
+    content: String!,
+    authorEmail: String!
+}
+
+input CreatePostRequest {
+    title: String!,
+    content: String!,
+    authorEmail: String!
+}
