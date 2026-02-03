@@ -1,8 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.CreateUserRequest;
-import com.example.demo.dto.UserResponse;
-import com.example.demo.mapper.MongoUserMapper;
+import com.example.demo.model.entity.User;
 import com.example.demo.repository.interfaces.UserRepository;
 import com.example.demo.service.interfaces.UserService;
 import org.springframework.stereotype.Service;
@@ -17,16 +15,16 @@ public class MongoUserService implements UserService {
         this.userRepository = userRepository;
     }
 
-    public UserResponse getById(String id) {
+    public User getById(String id) {
         return userRepository.getById(id);
     }
 
-    public List<UserResponse> getAll() {
+    public List<User> getAll() {
         return userRepository.getAll();
     }
 
-    public UserResponse create(CreateUserRequest request) {
-        return userRepository.insert(MongoUserMapper.toUser(request));
+    public User create(User user) {
+        return userRepository.insert(user);
     }
 
     @Override
@@ -35,7 +33,7 @@ public class MongoUserService implements UserService {
     }
 
     @Override
-    public UserResponse updatePassword(String id, String password) {
+    public User updatePassword(String id, String password) {
         return userRepository.updatePassword(id, password);
     }
 }
