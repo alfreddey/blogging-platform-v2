@@ -5,6 +5,7 @@ import com.example.demo.dto.CreateUserRequest;
 import com.example.demo.dto.UserRequest;
 import com.example.demo.dto.UserResponse;
 import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.mapper.UserMapper;
 import com.example.demo.service.interfaces.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -20,8 +21,10 @@ import java.util.List;
 @Tag(name = "User Management", description = "Operations for managing user accounts and profiles")
 public class UserRestController {
     private final UserService userService;
+    private final UserMapper userMapper;
 
-    public UserRestController(UserService userService) {
+    public UserRestController(UserService userService, UserMapper userMapper) {
+        this.userMapper = userMapper;
         this.userService = userService;
     }
 
@@ -45,13 +48,13 @@ public class UserRestController {
     })
     @GetMapping("/{id}")
     public ApiResponse<UserResponse> getById(@Valid @PathVariable String id) {
-        var response = userService.getById(id);
+        var user = userService.getById(id);
 
-        if (response == null) {
+        if (user == null) {
             throw new ResourceNotFoundException("User not found with ID: " + id);
         }
 
-        return new ApiResponse<>(HttpStatus.OK, "User retrieved successfully", response);
+        return new ApiResponse<>(HttpStatus.OK, "User retrieved successfully", userMapper.toResponse(user));
     }
 
     @Operation(
@@ -66,9 +69,9 @@ public class UserRestController {
     })
     @GetMapping
     public ApiResponse<List<UserResponse>> getAll() {
-        var response = userService.getAll();
+        var users = userService.getAll();
 
-        return new ApiResponse<>(HttpStatus.OK, "Users retrieved successfully", response);
+        return new ApiResponse<>(HttpStatus.OK, "Users retrieved successfully", users.stream().map(userMapper::toResponse).toList());
     }
 
     @Operation(summary = "Register a new user account")
@@ -80,9 +83,9 @@ public class UserRestController {
     })
     @PostMapping
     public ApiResponse<UserResponse> create(@Valid @RequestBody CreateUserRequest request) {
-        var response = userService.create(request);
+        var user = userService.create(userMapper.toUser(request));
 
-        return new ApiResponse<>(HttpStatus.CREATED, "User created successfully", response);
+        return new ApiResponse<>(HttpStatus.CREATED, "User created successfully", userMapper.toResponse(user));
     }
 
     @Operation(
@@ -101,9 +104,9 @@ public class UserRestController {
     })
     @PatchMapping("/{id}/password")
     public ApiResponse<UserResponse> updatePassword(@Valid @PathVariable String id, @RequestBody UserRequest request) {
-        var response = userService.updatePassword(id, request.password);
+        var user = userService.updatePassword(id, request.password);
 
-        return new ApiResponse<>(HttpStatus.OK, "User password updated successfully", response);
+        return new ApiResponse<>(HttpStatus.OK, "User password updated successfully", userMapper.toResponse(user));
     }
 
     @Operation(

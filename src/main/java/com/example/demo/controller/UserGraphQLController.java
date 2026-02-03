@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.CreateUserRequest;
 import com.example.demo.dto.UserResponse;
+import com.example.demo.mapper.UserMapper;
 import com.example.demo.service.interfaces.UserService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -13,24 +14,26 @@ import java.util.List;
 @Controller
 public class UserGraphQLController {
     private final UserService userService;
+    private final UserMapper userMapper;
 
-    public UserGraphQLController(UserService userService) {
+    public UserGraphQLController(UserService userService, UserMapper userMapper) {
+        this.userMapper = userMapper;
         this.userService = userService;
     }
 
     @QueryMapping
     public UserResponse user(@Argument String id) {
-        return userService.getById(id);
+        return userMapper.toResponse(userService.getById(id));
     }
 
     @QueryMapping
     public List<UserResponse> users() {
-        return userService.getAll();
+        return userService.getAll().stream().map(userMapper::toResponse).toList();
     }
 
     @MutationMapping
     public UserResponse createUser(@Argument CreateUserRequest input) {
-        return userService.create(input);
+        return userMapper.toResponse(userService.create(userMapper.toUser(input)));
     }
 
     @MutationMapping
@@ -40,6 +43,6 @@ public class UserGraphQLController {
 
     @MutationMapping
     public UserResponse updateUserPassword(@Argument String id, @Argument String password) {
-        return userService.updatePassword(id, password);
+        return userMapper.toResponse(userService.updatePassword(id, password));
     }
 }
