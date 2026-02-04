@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// TODO: Add openapi documentation
+
 @RestController
 @RequestMapping("api/v1/posts")
 public class PostRestController {
