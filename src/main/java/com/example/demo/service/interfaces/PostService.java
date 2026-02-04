@@ -9,4 +9,5 @@ public interface PostService {
     List<Post> getAll();
     Post create(Post post);
     boolean delete(String id);
+    Post updatePostContent(String id, String content);
 }
