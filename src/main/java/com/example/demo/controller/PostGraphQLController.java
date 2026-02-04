@@ -9,6 +9,8 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
+import java.util.List;
+
 @Controller
 public class PostGraphQLController {
     private final PostService postService;
@@ -24,10 +26,20 @@ public class PostGraphQLController {
         return postMapper.toResponse(postService.getById(id));
     }
 
+    @QueryMapping
+    public List<PostResponse> posts() {
+        return postService.getAll().stream().map(postMapper::toResponse).toList();
+    }
+
     @MutationMapping
     public PostResponse createPost(@Argument CreatePostRequest input) {
         var post = postMapper.toPost(input);
 
         return postMapper.toResponse(postService.create(post));
+    }
+
+    @MutationMapping
+    public boolean deletePost(@Argument String id) {
+        return postService.delete(id);
     }
 }

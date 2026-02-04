@@ -1,9 +1,11 @@
 extend type Query {
     post(id: ID!): PostResponse
+    posts: [PostResponse]
 }
 
 extend type Mutation {
     createPost(input: CreatePostRequest): PostResponse
+    deletePost(id: ID!): Boolean
 }
 
 type PostResponse {

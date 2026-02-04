@@ -8,4 +8,5 @@ public interface PostService {
     Post getById(String postId);
     List<Post> getAll();
     Post create(Post post);
+    boolean delete(String id);
 }

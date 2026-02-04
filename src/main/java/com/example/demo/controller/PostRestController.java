@@ -42,4 +42,9 @@ public class PostRestController {
 
         return new ApiResponse<>(HttpStatus.CREATED, "Post created successfully", postMapper.toResponse(postService.create(post)));
     }
+
+    @DeleteMapping("/{postId}")
+    public ApiResponse<Boolean> delete(@PathVariable String postId) {
+        return new ApiResponse<>(HttpStatus.OK, "Post deleted successfully", postService.delete(postId));
+    }
 }

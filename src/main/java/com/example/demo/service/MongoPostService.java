@@ -29,4 +29,9 @@ public class MongoPostService implements PostService {
     public Post create(Post post) {
         return postRepository.insert(post);
     }
+
+    @Override
+    public boolean delete(String postId) {
+        return postRepository.delete(postId);
+    }
 }

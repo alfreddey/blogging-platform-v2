@@ -23,6 +23,13 @@ public class MongoPostRepository implements PostRepository {
     }
 
     @Override
+    public boolean delete(String postId) {
+        var deleteResult = postCollection.deleteOne(Filters.eq("_id", new ObjectId(postId)));
+
+        return deleteResult.getDeletedCount() > 0;
+    }
+
+    @Override
     public List<Post> getAll() {
         var postDocuments = new ArrayList<Document>();
 
