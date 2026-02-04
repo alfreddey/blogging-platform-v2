@@ -9,4 +9,5 @@ public interface PostRepository {
     List<Post> getAll();
     Post insert(Post post);
     boolean delete(String postId);
+    Post updatePostContent(String id, String content);
 }

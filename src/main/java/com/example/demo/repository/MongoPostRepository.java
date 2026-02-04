@@ -7,6 +7,9 @@ import com.example.demo.repository.interfaces.PostRepository;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.FindOneAndUpdateOptions;
+import com.mongodb.client.model.ReturnDocument;
+import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
@@ -20,6 +23,20 @@ public class MongoPostRepository implements PostRepository {
 
     public MongoPostRepository(MongoDatabase postDatabase) {
         this.postCollection = postDatabase.getCollection("posts");
+    }
+
+    @Override
+    public Post updatePostContent(String id, String content) {
+        var filter = Filters.eq("_id", new ObjectId(id));
+        var update = Updates.set("content", content);
+        var updateOpts = new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER);
+        var postDocument = postCollection.findOneAndUpdate(filter, update, updateOpts);
+
+        if (postDocument == null) {
+            throw new ResourceNotFoundException("Post with id: " + id + "not found. Update was unsuccessful");
+        }
+
+        return MongoPostMapper.toPost(postDocument);
     }
 
     @Override

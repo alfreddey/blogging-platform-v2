@@ -60,15 +60,9 @@ public class MongoUserRepository implements UserRepository {
     @Override
     public User updatePassword(String id, String password) {
         var filter = Filters.eq("_id", new ObjectId(id));
-
-        var updates = Updates.combine(
-                Updates.set("password", password)
-        );
-
-        FindOneAndUpdateOptions options = new FindOneAndUpdateOptions()
-                .returnDocument(ReturnDocument.AFTER);
-
-        Document updatedDoc = userCollection.findOneAndUpdate(filter, updates, options);
+        var updates = Updates.set("password", password);
+        var options = new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER);
+        var updatedDoc = userCollection.findOneAndUpdate(filter, updates, options);
 
         if (updatedDoc == null) {
             throw new ResourceNotFoundException("User not found");
