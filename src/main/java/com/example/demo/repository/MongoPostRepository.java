@@ -33,7 +33,7 @@ public class MongoPostRepository implements PostRepository {
         var postDocument = postCollection.findOneAndUpdate(filter, update, updateOpts);
 
         if (postDocument == null) {
-            throw new ResourceNotFoundException("Post with id: " + id + "not found. Update was unsuccessful");
+            throw new ResourceNotFoundException("Post with id: " + id + " not found. Update was unsuccessful");
         }
 
         return MongoPostMapper.toPost(postDocument);
