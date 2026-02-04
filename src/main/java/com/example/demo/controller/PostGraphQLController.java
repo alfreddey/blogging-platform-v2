@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.CreatePostRequest;
+import com.example.demo.dto.PostRequest;
 import com.example.demo.dto.PostResponse;
 import com.example.demo.mapper.PostMapper;
 import com.example.demo.service.interfaces.PostService;
@@ -41,5 +42,10 @@ public class PostGraphQLController {
     @MutationMapping
     public boolean deletePost(@Argument String id) {
         return postService.delete(id);
+    }
+
+    @MutationMapping
+    public PostResponse updatePostContent(@Argument String id, @Argument PostRequest input) {
+        return postMapper.toResponse(postService.updatePostContent(id, input.getContent()));
     }
 }

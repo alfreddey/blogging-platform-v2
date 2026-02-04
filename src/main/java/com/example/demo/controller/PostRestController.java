@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.ApiResponse;
 import com.example.demo.dto.CreatePostRequest;
+import com.example.demo.dto.PostRequest;
 import com.example.demo.dto.PostResponse;
 import com.example.demo.mapper.PostMapper;
 import com.example.demo.service.interfaces.PostService;
@@ -46,5 +47,12 @@ public class PostRestController {
     @DeleteMapping("/{postId}")
     public ApiResponse<Boolean> delete(@PathVariable String postId) {
         return new ApiResponse<>(HttpStatus.OK, "Post deleted successfully", postService.delete(postId));
+    }
+
+    @PatchMapping("/{postId}")
+    public ApiResponse<PostResponse> updatePostContent(@PathVariable String postId, @RequestBody PostRequest request) {
+        var post = postService.updatePostContent(postId, request.getContent());
+
+        return new ApiResponse<>(HttpStatus.OK, "Post content updated successfully", postMapper.toResponse(post));
     }
 }
