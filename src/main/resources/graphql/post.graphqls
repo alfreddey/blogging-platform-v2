@@ -6,6 +6,14 @@ extend type Query {
 extend type Mutation {
     createPost(input: CreatePostRequest): PostResponse
     deletePost(id: ID!): Boolean
+    updatePostContent(id: ID!, input: PostRequest): PostResponse
+}
+
+input PostRequest {
+    id: ID,
+    title: String,
+    content: String,
+    authorEmail: String
 }
 
 type PostResponse {
