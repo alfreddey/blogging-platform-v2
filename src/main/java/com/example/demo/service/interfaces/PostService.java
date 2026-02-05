@@ -10,4 +10,5 @@ public interface PostService {
     Post create(Post post);
     boolean delete(String id);
     Post updatePostContent(String id, String content);
+    Post search(String term);
 }
