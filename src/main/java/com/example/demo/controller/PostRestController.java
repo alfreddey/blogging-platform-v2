@@ -6,15 +6,17 @@ import com.example.demo.dto.PostRequest;
 import com.example.demo.dto.PostResponse;
 import com.example.demo.mapper.PostMapper;
 import com.example.demo.service.interfaces.PostService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-// TODO: Add openapi documentation
-
 @RestController
 @RequestMapping("api/v1/posts")
+@Tag(name = "Post Management", description = "Operations for creating, searching, and managing blog posts")
 public class PostRestController {
     private final PostService postService;
     private final PostMapper postMapper;
@@ -24,6 +26,10 @@ public class PostRestController {
         this.postService = postService;
     }
 
+    @Operation(summary = "Get all posts", description = "Retrieves a full list of all blog posts from the system.")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "List of posts retrieved successfully")
+    })
     @GetMapping
     public ApiResponse<List<PostResponse>> getAll() {
         var posts = postService.getAll()
@@ -34,11 +40,20 @@ public class PostRestController {
         return new ApiResponse<>(HttpStatus.OK, "Posts retrieved successfully", posts);
     }
 
+    @Operation(summary = "Get post by ID", description = "Fetch details for a specific post using its unique ID.")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Post found"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Post not found")
+    })
     @GetMapping("/{postId}")
     public ApiResponse<PostResponse> getById(@PathVariable String postId) {
         return new ApiResponse<>(HttpStatus.OK, "Post retrieved successfully", postMapper.toResponse(postService.getById(postId)));
     }
 
+    @Operation(summary = "Create a new post", description = "Saves a new post and syncs it to the cache.")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Post created successfully")
+    })
     @PostMapping
     public ApiResponse<PostResponse> create(@RequestBody CreatePostRequest request) {
         var post = postMapper.toPost(request);
@@ -46,15 +61,39 @@ public class PostRestController {
         return new ApiResponse<>(HttpStatus.CREATED, "Post created successfully", postMapper.toResponse(postService.create(post)));
     }
 
+    @Operation(summary = "Delete a post", description = "Removes a post from both database and cache.")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Post deleted successfully")
+    })
     @DeleteMapping("/{postId}")
     public ApiResponse<Boolean> delete(@PathVariable String postId) {
         return new ApiResponse<>(HttpStatus.OK, "Post deleted successfully", postService.delete(postId));
     }
 
+    @Operation(summary = "Update post content", description = "Partially updates the content field of an existing post.")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Content updated successfully"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Post not found")
+    })
     @PatchMapping("/{postId}")
     public ApiResponse<PostResponse> updatePostContent(@PathVariable String postId, @RequestBody PostRequest request) {
         var post = postService.updatePostContent(postId, request.getContent());
 
         return new ApiResponse<>(HttpStatus.OK, "Post content updated successfully", postMapper.toResponse(post));
+    }
+
+    @Operation(
+            summary = "Search posts",
+            description = "Finds a post by an exact title match using optimized Binary Search."
+    )
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Match found"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "No post matches the query")
+    })
+    @GetMapping("/search")
+    public ApiResponse<PostResponse> searchPost(@RequestParam String query) {
+        var post = postService.search(query);
+
+        return new ApiResponse<>(HttpStatus.OK, "Post found successfully", postMapper.toResponse(post));
     }
 }
