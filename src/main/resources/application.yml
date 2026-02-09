@@ -1,5 +1,24 @@
-spring.application.name=demo
-server.port=8080
-logging.level.root=INFO
-spring.graphql.graphiql.enabled=true
-spring.graphql.schema.printer.enabled=true
+spring:
+  profiles:
+    active: dev
+  application:
+    name: demo
+  graphql:
+    graphiql:
+      enabled: true
+    schema:
+      printer:
+        enabled: true
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+
+api:
+  base-url: api/v1
