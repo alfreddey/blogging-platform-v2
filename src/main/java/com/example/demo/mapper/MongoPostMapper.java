@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.Date;
 
 @Component
-public class MongoPostMapper implements PostMapper {
+public class MongoPostMapper implements Mapper<Post, PostResponse, CreatePostRequest> {
     @Override
     public PostResponse toResponse(Post post) {
         var response = new PostResponse();
@@ -29,7 +29,7 @@ public class MongoPostMapper implements PostMapper {
     }
 
     @Override
-    public Post toPost(CreatePostRequest request) {
+    public Post toEntity(CreatePostRequest request) {
         var post = new Post();
 
         post.setTitle(request.getTitle());

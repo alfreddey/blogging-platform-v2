@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.Date;
 
 @Component
-public class MongoCommentMapper implements CommentMapper {
+public class MongoCommentMapper implements Mapper<Comment, CommentResponse, CreateCommentRequest> {
     public static Document toDocument(Comment comment) {
         var document = new Document();
 
@@ -25,7 +25,7 @@ public class MongoCommentMapper implements CommentMapper {
     }
 
     @Override
-    public Comment toComment(CreateCommentRequest request) {
+    public Comment toEntity(CreateCommentRequest request) {
         var comment = new Comment();
 
         comment.setAuthorEmail(request.getAuthorEmail());
