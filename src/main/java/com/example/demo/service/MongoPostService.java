@@ -27,8 +27,6 @@ public class MongoPostService implements PostService {
         var cacheResult = postCache.getAll();
 
         if (cacheResult != null && !cacheResult.isEmpty()) {
-            System.out.println("From cache: " + cacheResult);
-
             return cacheResult;
         }
 

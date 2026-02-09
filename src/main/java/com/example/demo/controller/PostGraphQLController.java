@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.CreatePostRequest;
 import com.example.demo.dto.PostRequest;
 import com.example.demo.dto.PostResponse;
 import com.example.demo.mapper.Mapper;
@@ -16,9 +15,9 @@ import java.util.List;
 @Controller
 public class PostGraphQLController {
     private final PostService postService;
-    private final Mapper<Post, PostResponse, CreatePostRequest> postMapper;
+    private final Mapper<Post, PostResponse, PostRequest> postMapper;
 
-    public PostGraphQLController(PostService postService, Mapper<Post, PostResponse, CreatePostRequest> postMapper) {
+    public PostGraphQLController(PostService postService, Mapper<Post, PostResponse, PostRequest> postMapper) {
         this.postService = postService;
         this.postMapper = postMapper;
     }
@@ -34,7 +33,7 @@ public class PostGraphQLController {
     }
 
     @MutationMapping
-    public PostResponse createPost(@Argument CreatePostRequest input) {
+    public PostResponse createPost(@Argument PostRequest input) {
         var post = postMapper.toEntity(input);
 
         return postMapper.toResponse(postService.create(post));

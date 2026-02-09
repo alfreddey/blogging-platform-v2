@@ -1,6 +1,6 @@
 package com.example.demo.mapper;
 
-import com.example.demo.dto.CreatePostRequest;
+import com.example.demo.dto.PostRequest;
 import com.example.demo.dto.PostResponse;
 import com.example.demo.model.entity.Comment;
 import com.example.demo.model.entity.Post;
@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.Date;
 
 @Component
-public class MongoPostMapper implements Mapper<Post, PostResponse, CreatePostRequest> {
+public class MongoPostMapper implements Mapper<Post, PostResponse, PostRequest> {
     @Override
     public PostResponse toResponse(Post post) {
         var response = new PostResponse();
@@ -29,7 +29,7 @@ public class MongoPostMapper implements Mapper<Post, PostResponse, CreatePostReq
     }
 
     @Override
-    public Post toEntity(CreatePostRequest request) {
+    public Post toEntity(PostRequest request) {
         var post = new Post();
 
         post.setTitle(request.getTitle());

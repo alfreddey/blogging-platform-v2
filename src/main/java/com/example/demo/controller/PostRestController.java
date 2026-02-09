@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.ApiResponse;
-import com.example.demo.dto.CreatePostRequest;
 import com.example.demo.dto.PostRequest;
 import com.example.demo.dto.PostResponse;
 import com.example.demo.mapper.Mapper;
@@ -10,6 +9,7 @@ import com.example.demo.service.interfaces.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +20,9 @@ import java.util.List;
 @Tag(name = "Post Management", description = "Operations for creating, searching, and managing blog posts")
 public class PostRestController {
     private final PostService postService;
-    private final Mapper<Post, PostResponse, CreatePostRequest> postMapper;
+    private final Mapper<Post, PostResponse, PostRequest> postMapper;
 
-    public PostRestController(PostService postService, Mapper<Post, PostResponse, CreatePostRequest> postMapper) {
+    public PostRestController(PostService postService, Mapper<Post, PostResponse, PostRequest> postMapper) {
         this.postMapper = postMapper;
         this.postService = postService;
     }
@@ -47,7 +47,7 @@ public class PostRestController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Post not found")
     })
     @GetMapping("/{postId}")
-    public ApiResponse<PostResponse> getById(@PathVariable String postId) {
+    public ApiResponse<PostResponse> getById(@Valid @PathVariable String postId) {
         return new ApiResponse<>(HttpStatus.OK, "Post retrieved successfully", postMapper.toResponse(postService.getById(postId)));
     }
 
@@ -56,7 +56,7 @@ public class PostRestController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Post created successfully")
     })
     @PostMapping
-    public ApiResponse<PostResponse> create(@RequestBody CreatePostRequest request) {
+    public ApiResponse<PostResponse> create(@Valid @RequestBody PostRequest request) {
         var post = postMapper.toEntity(request);
 
         return new ApiResponse<>(HttpStatus.CREATED, "Post created successfully", postMapper.toResponse(postService.create(post)));
@@ -67,7 +67,7 @@ public class PostRestController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Post deleted successfully")
     })
     @DeleteMapping("/{postId}")
-    public ApiResponse<Boolean> delete(@PathVariable String postId) {
+    public ApiResponse<Boolean> delete(@Valid @PathVariable String postId) {
         return new ApiResponse<>(HttpStatus.OK, "Post deleted successfully", postService.delete(postId));
     }
 
@@ -77,7 +77,7 @@ public class PostRestController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Post not found")
     })
     @PatchMapping("/{postId}")
-    public ApiResponse<PostResponse> updatePostContent(@PathVariable String postId, @RequestBody PostRequest request) {
+    public ApiResponse<PostResponse> updatePostContent(@Valid @PathVariable String postId, @RequestBody PostRequest request) {
         var post = postService.updatePostContent(postId, request.getContent());
 
         return new ApiResponse<>(HttpStatus.OK, "Post content updated successfully", postMapper.toResponse(post));
@@ -92,7 +92,7 @@ public class PostRestController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "No post matches the query")
     })
     @GetMapping("/search")
-    public ApiResponse<PostResponse> searchPost(@RequestParam String query) {
+    public ApiResponse<PostResponse> searchPost(@Valid @RequestParam String query) {
         var post = postService.search(query);
 
         return new ApiResponse<>(HttpStatus.OK, "Post found successfully", postMapper.toResponse(post));

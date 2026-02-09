@@ -1,6 +1,6 @@
 package com.example.demo.mapper;
 
-import com.example.demo.dto.CreateUserRequest;
+import com.example.demo.dto.UserRequest;
 import com.example.demo.dto.UserResponse;
 import com.example.demo.model.entity.User;
 import org.bson.Document;
@@ -8,7 +8,7 @@ import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MongoUserMapper implements Mapper<User, UserResponse, CreateUserRequest> {
+public class MongoUserMapper implements Mapper<User, UserResponse, UserRequest> {
     @Override
     public UserResponse toResponse(User user) {
         if (user == null) {
@@ -25,7 +25,7 @@ public class MongoUserMapper implements Mapper<User, UserResponse, CreateUserReq
     }
 
     @Override
-    public User toEntity(CreateUserRequest request) {
+    public User toEntity(UserRequest request) {
         return request == null ? null : map(null, request.name, request.email, request.password);
     }
 

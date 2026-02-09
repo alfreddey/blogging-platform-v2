@@ -1,7 +1,7 @@
 package com.example.demo.mapper;
 
 import com.example.demo.dto.CommentResponse;
-import com.example.demo.dto.CreateCommentRequest;
+import com.example.demo.dto.CommentRequest;
 import com.example.demo.model.entity.Comment;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.Date;
 
 @Component
-public class MongoCommentMapper implements Mapper<Comment, CommentResponse, CreateCommentRequest> {
+public class MongoCommentMapper implements Mapper<Comment, CommentResponse, CommentRequest> {
     public static Document toDocument(Comment comment) {
         var document = new Document();
 
@@ -25,7 +25,7 @@ public class MongoCommentMapper implements Mapper<Comment, CommentResponse, Crea
     }
 
     @Override
-    public Comment toEntity(CreateCommentRequest request) {
+    public Comment toEntity(CommentRequest request) {
         var comment = new Comment();
 
         comment.setAuthorEmail(request.getAuthorEmail());

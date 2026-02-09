@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.CreateUserRequest;
+import com.example.demo.dto.UserRequest;
 import com.example.demo.dto.UserResponse;
 import com.example.demo.mapper.Mapper;
 import com.example.demo.model.entity.User;
@@ -15,9 +15,9 @@ import java.util.List;
 @Controller
 public class UserGraphQLController {
     private final UserService userService;
-    private final Mapper<User, UserResponse, CreateUserRequest> userMapper;
+    private final Mapper<User, UserResponse, UserRequest> userMapper;
 
-    public UserGraphQLController(UserService userService, Mapper<User, UserResponse, CreateUserRequest> userMapper) {
+    public UserGraphQLController(UserService userService, Mapper<User, UserResponse, UserRequest> userMapper) {
         this.userMapper = userMapper;
         this.userService = userService;
     }
@@ -33,7 +33,7 @@ public class UserGraphQLController {
     }
 
     @MutationMapping
-    public UserResponse createUser(@Argument CreateUserRequest input) {
+    public UserResponse createUser(@Argument UserRequest input) {
         return userMapper.toResponse(userService.create(userMapper.toEntity(input)));
     }
 

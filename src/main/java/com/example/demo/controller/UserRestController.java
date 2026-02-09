@@ -19,9 +19,9 @@ import java.util.List;
 @Tag(name = "User Management", description = "Operations for managing user accounts and profiles")
 public class UserRestController {
     private final UserService userService;
-    private final Mapper<User, UserResponse, CreateUserRequest> userMapper;
+    private final Mapper<User, UserResponse, UserRequest> userMapper;
 
-    public UserRestController(UserService userService, Mapper<User, UserResponse, CreateUserRequest> userMapper) {
+    public UserRestController(UserService userService, Mapper<User, UserResponse, UserRequest> userMapper) {
         this.userMapper = userMapper;
         this.userService = userService;
     }
@@ -80,7 +80,7 @@ public class UserRestController {
             )
     })
     @PostMapping
-    public ApiResponse<UserResponse> create(@Valid @RequestBody CreateUserRequest request) {
+    public ApiResponse<UserResponse> create(@Valid @RequestBody UserRequest request) {
         var user = userService.create(userMapper.toEntity(request));
 
         return new ApiResponse<>(HttpStatus.CREATED, "User created successfully", userMapper.toResponse(user));
@@ -101,7 +101,7 @@ public class UserRestController {
             )
     })
     @PatchMapping("/{id}/password")
-    public ApiResponse<UserResponse> updatePassword(@Valid @PathVariable String id, @RequestBody UserRequest request) {
+    public ApiResponse<UserResponse> updatePassword(@Valid @PathVariable String id, @Valid @RequestBody UserRequest request) {
         var user = userService.updatePassword(id, request.password);
 
         return new ApiResponse<>(HttpStatus.OK, "User password updated successfully", userMapper.toResponse(user));

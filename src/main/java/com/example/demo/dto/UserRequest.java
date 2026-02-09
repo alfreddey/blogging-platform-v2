@@ -1,8 +1,17 @@
 package com.example.demo.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 public class UserRequest {
+    @NotBlank(message = "Name is required")
     public String name;
+
+    @NotBlank(message = "Email is required")
+    @Email(message = "Please provide a valid email address")
     public String email;
+
+    @NotBlank(message = "Password is required")
     public String password;
 
     public String getName() {

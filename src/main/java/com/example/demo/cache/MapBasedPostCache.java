@@ -28,6 +28,10 @@ public class MapBasedPostCache implements Cache<Post> {
     public Post getById(String postId) {
         var postCacheEntry = cache.get(postId);
 
+        if (postCacheEntry == null) {
+            return null;
+        }
+
         if (postCacheEntry.getExpiryTime() <= System.currentTimeMillis()) {
             cache.remove(postId);
         }
