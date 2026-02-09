@@ -42,6 +42,7 @@ public class MapBasedPostCache implements Cache<Post> {
     @Override
     public List<Post> getAll() {
         cache.values().removeIf(cacheEntry -> cacheEntry.getExpiryTime() <= System.currentTimeMillis());
+
         return new ArrayList<>(cache.values().stream().map(PostCacheEntry::getPost).toList());
     }
 

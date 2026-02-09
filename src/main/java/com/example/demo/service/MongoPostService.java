@@ -23,14 +23,14 @@ public class MongoPostService implements PostService {
     }
 
     @Override
-    public List<Post> getAll() {
+    public List<Post> getAll(int page, int size) {
         var cacheResult = postCache.getAll();
 
-        if (cacheResult != null && !cacheResult.isEmpty()) {
+        if (cacheResult != null && !cacheResult.isEmpty() && cacheResult.size() >= size) {
             return cacheResult;
         }
 
-        var posts = postRepository.getAll();
+        var posts = postRepository.getAll(page, size);
         posts.forEach(postCache::put);
 
         return posts;

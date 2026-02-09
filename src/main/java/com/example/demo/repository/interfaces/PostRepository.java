@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PostRepository {
     Post getById(String postId);
-    List<Post> getAll();
+    List<Post> getAll(int page, int size);
     Post insert(Post post);
     boolean delete(String postId);
     Post updatePostContent(String id, String content);

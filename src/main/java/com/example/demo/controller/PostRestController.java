@@ -32,8 +32,8 @@ public class PostRestController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "List of posts retrieved successfully")
     })
     @GetMapping
-    public ApiResponse<List<PostResponse>> getAll() {
-        var posts = postService.getAll()
+    public ApiResponse<List<PostResponse>> getAll(@RequestParam (defaultValue = "0") int page, @RequestParam(defaultValue = "4") int size) {
+        var posts = postService.getAll(page, size)
                 .stream()
                 .map(postMapper::toResponse)
                 .toList();

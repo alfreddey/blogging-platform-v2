@@ -47,10 +47,10 @@ public class MongoPostRepository implements PostRepository {
     }
 
     @Override
-    public List<Post> getAll() {
+    public List<Post> getAll(int page, int size) {
         var postDocuments = new ArrayList<Document>();
 
-        postCollection.find().into(postDocuments);
+        postCollection.find().skip(page * size).limit(size).into(postDocuments);
 
         return new ArrayList<>(postDocuments.stream().map(MongoPostMapper::toPost).toList());
     }

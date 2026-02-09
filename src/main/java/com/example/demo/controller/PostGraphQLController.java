@@ -28,8 +28,8 @@ public class PostGraphQLController {
     }
 
     @QueryMapping
-    public List<PostResponse> posts() {
-        return postService.getAll().stream().map(postMapper::toResponse).toList();
+    public List<PostResponse> posts(@Argument int page, @Argument int size) {
+        return postService.getAll(page, size).stream().map(postMapper::toResponse).toList();
     }
 
     @MutationMapping

@@ -1,6 +1,6 @@
 extend type Query {
     post(id: ID!): PostResponse
-    posts: [PostResponse]
+    posts(page: Int! = 0, size: Int! = 4): [PostResponse]
 }
 
 extend type Mutation {
