@@ -1,11 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ApiResponse;
-import com.example.demo.dto.CreateUserRequest;
-import com.example.demo.dto.UserRequest;
-import com.example.demo.dto.UserResponse;
+import com.example.demo.dto.*;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.mapper.UserMapper;
+import com.example.demo.mapper.Mapper;
+import com.example.demo.model.entity.User;
 import com.example.demo.service.interfaces.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -17,13 +15,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/users")
+@RequestMapping("${api.base-url}/users")
 @Tag(name = "User Management", description = "Operations for managing user accounts and profiles")
 public class UserRestController {
     private final UserService userService;
-    private final UserMapper userMapper;
+    private final Mapper<User, UserResponse, CreateUserRequest> userMapper;
 
-    public UserRestController(UserService userService, UserMapper userMapper) {
+    public UserRestController(UserService userService, Mapper<User, UserResponse, CreateUserRequest> userMapper) {
         this.userMapper = userMapper;
         this.userService = userService;
     }
@@ -83,7 +81,7 @@ public class UserRestController {
     })
     @PostMapping
     public ApiResponse<UserResponse> create(@Valid @RequestBody CreateUserRequest request) {
-        var user = userService.create(userMapper.toUser(request));
+        var user = userService.create(userMapper.toEntity(request));
 
         return new ApiResponse<>(HttpStatus.CREATED, "User created successfully", userMapper.toResponse(user));
     }

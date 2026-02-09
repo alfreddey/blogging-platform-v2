@@ -3,7 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.dto.CreatePostRequest;
 import com.example.demo.dto.PostRequest;
 import com.example.demo.dto.PostResponse;
-import com.example.demo.mapper.PostMapper;
+import com.example.demo.mapper.Mapper;
+import com.example.demo.model.entity.Post;
 import com.example.demo.service.interfaces.PostService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -15,9 +16,9 @@ import java.util.List;
 @Controller
 public class PostGraphQLController {
     private final PostService postService;
-    private final PostMapper postMapper;
+    private final Mapper<Post, PostResponse, CreatePostRequest> postMapper;
 
-    public PostGraphQLController(PostService postService, PostMapper postMapper) {
+    public PostGraphQLController(PostService postService, Mapper<Post, PostResponse, CreatePostRequest> postMapper) {
         this.postService = postService;
         this.postMapper = postMapper;
     }
@@ -34,7 +35,7 @@ public class PostGraphQLController {
 
     @MutationMapping
     public PostResponse createPost(@Argument CreatePostRequest input) {
-        var post = postMapper.toPost(input);
+        var post = postMapper.toEntity(input);
 
         return postMapper.toResponse(postService.create(post));
     }

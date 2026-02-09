@@ -4,7 +4,8 @@ import com.example.demo.dto.ApiResponse;
 import com.example.demo.dto.CreatePostRequest;
 import com.example.demo.dto.PostRequest;
 import com.example.demo.dto.PostResponse;
-import com.example.demo.mapper.PostMapper;
+import com.example.demo.mapper.Mapper;
+import com.example.demo.model.entity.Post;
 import com.example.demo.service.interfaces.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -15,13 +16,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/posts")
+@RequestMapping("${api.base-url}/posts")
 @Tag(name = "Post Management", description = "Operations for creating, searching, and managing blog posts")
 public class PostRestController {
     private final PostService postService;
-    private final PostMapper postMapper;
+    private final Mapper<Post, PostResponse, CreatePostRequest> postMapper;
 
-    public PostRestController(PostService postService, PostMapper postMapper) {
+    public PostRestController(PostService postService, Mapper<Post, PostResponse, CreatePostRequest> postMapper) {
         this.postMapper = postMapper;
         this.postService = postService;
     }
@@ -56,7 +57,7 @@ public class PostRestController {
     })
     @PostMapping
     public ApiResponse<PostResponse> create(@RequestBody CreatePostRequest request) {
-        var post = postMapper.toPost(request);
+        var post = postMapper.toEntity(request);
 
         return new ApiResponse<>(HttpStatus.CREATED, "Post created successfully", postMapper.toResponse(postService.create(post)));
     }
