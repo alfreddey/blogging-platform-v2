@@ -26,7 +26,6 @@ public class MongoPostService implements PostService {
     public List<Post> getAll() {
         var cacheResult = postCache.getAll();
 
-
         if (cacheResult != null && !cacheResult.isEmpty()) {
             System.out.println("From cache: " + cacheResult);
 
@@ -60,7 +59,7 @@ public class MongoPostService implements PostService {
 
     @Override
     public Post create(Post post) {
-        postRepository.insert(post);
+        post = postRepository.insert(post);
         postCache.put(post);
 
         return post;
